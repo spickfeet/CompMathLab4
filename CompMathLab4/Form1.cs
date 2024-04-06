@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
+using Testing;
 
 namespace CompMathLab3
 {
     public partial class Form1 : Form
     {
+        private bool _isPointsExist = false;
         //private double[,] _numbers = new double[,] { { 2, 4, 5 ,6,7}, { 6,6,1,-1,11 } };
-
+        private double[,] _numbersFirstDeriv = new double[2, 5] { { 0.01, 0.1, 1, 10, 100 }, { 0.02, 0.2, 2, 20, 200 } };
         private Lagrange _lagrange = new Lagrange();
         private NewtonForm _newtonForm = new NewtonForm();
         private LeastSquares _leastSquares = new LeastSquares();
         private CubeSpline _cubeSpline = new CubeSpline();
-
+        private Derivative _derivative = new Derivative();
 
         private double MaxX
         {
@@ -72,6 +75,24 @@ namespace CompMathLab3
                 chart1.Series[5].Points.AddXY(x, y);
                 x += 0.01;
             }
+        }
+
+        private void DrawByFirstDerivative()
+        {
+            richTextBox1.Text = $"\nШаг: 10^{(double)numericStepDegree.Value}\n";
+            chart1.Series[6].Points.Clear();
+            chart1.ChartAreas[0].Axes[0].Maximum = 1.1;
+            chart1.ChartAreas[0].Axes[1].Maximum = 2.1;
+            double step = Math.Pow(10,(double) numericStepDegree.Value);
+            double derivative = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                derivative = _derivative.CalculateFirstDerivative(Numbers[0, i], step);
+                chart1.Series[6].Points.AddXY(Numbers[0, i],derivative );
+                richTextBox1.Text += $"\nx = {Numbers[0, i]}, f'(x) = {derivative}\n";
+            }
+            
         }
 
         private void DrawByLeastSquares()
@@ -147,7 +168,32 @@ namespace CompMathLab3
                 chart1.Series[3].Points.AddXY(Numbers[0, i], Numbers[1, i]);
             }
         }
-        
+        private void DrawPointsFirstDerivative()
+        {
+            
+            if(!_isPointsExist)
+            {
+                chart1.Series[7].Points.Clear();
+                chart1.Series[7].MarkerSize = 8;
+                chart1.Series[7].MarkerColor = System.Drawing.Color.Red;
+                chart1.Series[7].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+                for (int i = 0; i < _numbersFirstDeriv.GetLength(1); i++)
+                    chart1.Series[7].Points.AddXY(_numbersFirstDeriv[0, i], _numbersFirstDeriv[1, i]);
+                
+                _isPointsExist = true;
+            }
+            
+        }
+        private void DrawPointsFirstAndSecondDerivative()
+        {
+            chart1.Series[3].Points.Clear();
+            chart1.Series[3].MarkerSize = 8;
+            chart1.Series[3].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            for (int i = 0; i < Numbers.GetLength(1); i++)
+            {
+                chart1.Series[3].Points.AddXY(Numbers[0, i], Numbers[1, i]);
+            }
+        }
         private void buttonClear_Click(object sender, EventArgs e)
         {
             for(int i = 0;i < chart1.Series.Count;i++)
@@ -210,8 +256,11 @@ namespace CompMathLab3
 
 
 
+            if (comboBoxMethods.SelectedIndex != 4)
+                DrawPoints();
+            else
+                DrawPointsFirstDerivative();
 
-            DrawPoints();
             switch (comboBoxMethods.SelectedIndex)
             {
                 case -1:
@@ -229,6 +278,9 @@ namespace CompMathLab3
                 case 3:
                     DrawByCubeSpline();
                     break;
+                case 4:
+                    DrawByFirstDerivative();
+                    break;
 
             }
         }
@@ -241,8 +293,32 @@ namespace CompMathLab3
                 labelDegree.Visible = true;
                 numericUpDownDegree.Visible = true;
             }
+            else if(comboBoxMethods.SelectedIndex == 4)
+            {
+                labelDegree.Visible = false;
+                numericUpDownDegree.Visible = false;
+                labelStep.Visible = true;
+                labelStepBase10.Visible = true;
+                numericStepDegree.Visible = true;
+                label1.Visible = false;
+                label2.Visible = false;
+                label3.Visible = false;
+                label4.Visible = false;
+                label5.Visible = false;
+                textBoxA4.Visible = false;
+                textBoxA3.Visible = false;
+                textBoxA2.Visible = false;
+                textBoxA1.Visible = false;
+                textBoxA0.Visible = false;
+                labelDegree.Visible = false;
+                numericUpDownDegree.Visible = false;
+            }
+
             else
             {
+                labelStep.Visible = false;
+                labelStepBase10.Visible = false;
+                numericStepDegree.Visible = false;
                 numericUpDownDegree.Value = 0;
                 label1.Visible = false;
                 label2.Visible = false;
