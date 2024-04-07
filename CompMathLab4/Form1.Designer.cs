@@ -37,6 +37,10 @@
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridViewCoordinates = new System.Windows.Forms.DataGridView();
@@ -66,7 +70,7 @@
             this.labelStepBase10 = new System.Windows.Forms.Label();
             this.labelStep = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.labelFirstDev = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCoordinates)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDegree)).BeginInit();
@@ -118,6 +122,26 @@
             series8.ChartArea = "ChartArea1";
             series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series8.Name = "Series8";
+            series9.BorderWidth = 3;
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series9.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            series9.Name = "Series9";
+            series10.BorderWidth = 3;
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series10.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            series10.Name = "Series10";
+            series11.BorderWidth = 6;
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series11.Color = System.Drawing.Color.Black;
+            series11.Name = "Series11";
+            series12.BorderWidth = 6;
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series12.Color = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            series12.Name = "Series12";
             this.chart1.Series.Add(series1);
             this.chart1.Series.Add(series2);
             this.chart1.Series.Add(series3);
@@ -126,6 +150,10 @@
             this.chart1.Series.Add(series6);
             this.chart1.Series.Add(series7);
             this.chart1.Series.Add(series8);
+            this.chart1.Series.Add(series9);
+            this.chart1.Series.Add(series10);
+            this.chart1.Series.Add(series11);
+            this.chart1.Series.Add(series12);
             this.chart1.Size = new System.Drawing.Size(1066, 753);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "Графики";
@@ -471,17 +499,19 @@
             this.richTextBox1.Size = new System.Drawing.Size(430, 292);
             this.richTextBox1.TabIndex = 28;
             this.richTextBox1.Text = "";
+            this.richTextBox1.Visible = false;
             // 
-            // label6
+            // labelFirstDev
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(1111, 444);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(359, 25);
-            this.label6.TabIndex = 29;
-            this.label6.Text = "Приближ. знач. первой производной:";
+            this.labelFirstDev.AutoSize = true;
+            this.labelFirstDev.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelFirstDev.ForeColor = System.Drawing.Color.White;
+            this.labelFirstDev.Location = new System.Drawing.Point(1111, 444);
+            this.labelFirstDev.Name = "labelFirstDev";
+            this.labelFirstDev.Size = new System.Drawing.Size(359, 25);
+            this.labelFirstDev.TabIndex = 29;
+            this.labelFirstDev.Text = "Приближ. знач. первой производной:";
+            this.labelFirstDev.Visible = false;
             // 
             // Form1
             // 
@@ -489,7 +519,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1825, 776);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.labelFirstDev);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.labelStep);
             this.Controls.Add(this.labelStepBase10);
@@ -565,7 +595,7 @@
         private System.Windows.Forms.Label labelStepBase10;
         private System.Windows.Forms.Label labelStep;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelFirstDev;
     }
 }
 

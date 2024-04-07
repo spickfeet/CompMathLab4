@@ -11,74 +11,87 @@ namespace CompMathLab3
     internal class CubeSpline
     {
 
-        public void GetCoefA(double[] a, double[,] numbers)
+        private double[,] _numbers;
+        private double[,] _splineSystem;
+        private Matrix _matrix;
+        private TridiagonalMatrixAlgorithm _t;
+
+        public double[,] SplineSystem {  get =>_splineSystem; }
+
+        public CubeSpline(double[,] numbers)
+        {
+            _numbers = numbers;
+            GetSplineSystem();
+        }
+        
+
+        private void GetCoefA(double[] a)
         {
             for (int i = 0; i < a.Length; i++)
-            {
-                a[i] = numbers[1,i];
-            }
+                a[i] = _numbers[1,i];
+            
         }
-        public void GetCoefC(out double[] c, double[,] numbers)
+        private void GetCoefC(out double[] c)
         {
             int rowIndex = 0;
-            double[,] matrixC = new double[numbers.GetLength(1) - 1, numbers.GetLength(1)];
+            double[,] matrixC = new double[_numbers.GetLength(1) - 1, _numbers.GetLength(1)];
             matrixC[rowIndex, 0] = 1;
             rowIndex++;
 
-            for (int i = 1; i < numbers.GetLength(1) - 1; i++)
+            for (int i = 1; i < _numbers.GetLength(1) - 1; i++)
             {
-                matrixC[rowIndex, i - 1] = numbers[0,i] - numbers[0, i - 1];
-                matrixC[rowIndex, i] = 2 * (numbers[0, i] - numbers[0, i - 1] + numbers[0, i + 1] - numbers[0, i]);
+                matrixC[rowIndex, i - 1] = _numbers[0,i] - _numbers[0, i - 1];
+                matrixC[rowIndex, i] = 2 * (_numbers[0, i] - _numbers[0, i - 1] + _numbers[0, i + 1] - _numbers[0, i]);
 
-                if(i + 1 != numbers.GetLength(1))
-                    matrixC[rowIndex, i + 1] = numbers[0, i + 1] - numbers[0, i];
+                if(i + 1 != _numbers.GetLength(1))
+                    matrixC[rowIndex, i + 1] = _numbers[0, i + 1] - _numbers[0, i];
 
 
-                matrixC[rowIndex, matrixC.GetLength(1) - 1] = 3 * ((numbers[1,i + 1] - numbers[1,i])/(numbers[0, i + 1] - numbers[0, i]) -
-                    (numbers[1, i] - numbers[1, i - 1]) / (numbers[0, i] - numbers[0, i - 1]));
+                matrixC[rowIndex, matrixC.GetLength(1) - 1] = 3 * ((_numbers[1,i + 1] - _numbers[1,i])/(_numbers[0, i + 1] - _numbers[0, i]) -
+                    (_numbers[1, i] - _numbers[1, i - 1]) / (_numbers[0, i] - _numbers[0, i - 1]));
                 rowIndex++;
             }
-            Matrix matrix = new Matrix(matrixC);
-            TridiagonalMatrixAlgorithm t = new TridiagonalMatrixAlgorithm(matrix);
-            c = t.Answers;
+            _matrix = new Matrix(matrixC);
+            _t = new TridiagonalMatrixAlgorithm(_matrix);
+            c = _t.Answers;
         }
 
-        public void GetCoefD(double[] d, double[] c, double[,] numbers)
+        private void GetCoefD(double[] d, double[] c)
         {
-            for (int i = 0; i < numbers.GetLength(1) - 1; i++)
+            for (int i = 0; i < _numbers.GetLength(1) - 1; i++)
             {
-                if (i + 1 == numbers.GetLength(1) - 1)
+                if (i + 1 == _numbers.GetLength(1) - 1)
                 {
-                    d[i] = (0 - c[i]) / (3 * (numbers[0, i + 1] - numbers[0, i]));
+                    d[i] = (0 - c[i]) / (3 * (_numbers[0, i + 1] - _numbers[0, i]));
                     continue;
                 }
-                d[i] = (c[i + 1] - c[i]) / (3 * (numbers[0, i + 1] - numbers[0, i]));
+                d[i] = (c[i + 1] - c[i]) / (3 * (_numbers[0, i + 1] - _numbers[0, i]));
             }
         }
-        public void GetCoefB(double[] b, double[] c, double[,] numbers)
+        private void GetCoefB(double[] b, double[] c)
         {
-            for (int i = 0; i < numbers.GetLength(1) - 1; i++)
+            for (int i = 0; i < _numbers.GetLength(1) - 1; i++)
             {
-                if (i + 1 == numbers.GetLength(1) - 1)
+                if (i + 1 == _numbers.GetLength(1) - 1)
                 {
-                    b[i] = (numbers[1, i + 1] - numbers[1, i]) / (numbers[0, i + 1] - numbers[0, i]) - ((0 + 2 * c[i]) * (numbers[0, i + 1] - numbers[0, i])) / 3;
+                    b[i] = (_numbers[1, i + 1] - _numbers[1, i]) / (_numbers[0, i + 1] - _numbers[0, i]) - ((0 + 2 * c[i]) * (_numbers[0, i + 1] - _numbers[0, i])) / 3;
                     continue;
                 }
-                b[i] = (numbers[1,i + 1] - numbers[1, i]) / (numbers[0,i + 1] - numbers[0, i]) - ((c[i+1] + 2 * c[i]) * (numbers[0,i + 1] - numbers[0, i])) /3;
+                b[i] = (_numbers[1,i + 1] - _numbers[1, i]) / (_numbers[0,i + 1] - _numbers[0, i]) - ((c[i+1] + 2 * c[i]) * (_numbers[0,i + 1] - _numbers[0, i])) /3;
             }
         }
 
-        public double[,] GetSplineSystem(double[,] numbers)
+        private void GetSplineSystem()
         {
-            double[] a = new double[numbers.GetLength(1) - 1];
-            double[] b = new double[numbers.GetLength(1) - 1];
-            double[] c = new double[numbers.GetLength(1) - 1];
-            double[] d = new double[numbers.GetLength(1) - 1];
+            double[] a = new double[_numbers.GetLength(1) - 1];
+            double[] b = new double[_numbers.GetLength(1) - 1];
+            double[] c = new double[_numbers.GetLength(1) - 1];
+            double[] d = new double[_numbers.GetLength(1) - 1];
 
-            GetCoefA(a, numbers);
-            GetCoefC(out c, numbers);
-            GetCoefB(b, c, numbers);
-            GetCoefD(d, c, numbers);
+            GetCoefA(a);
+            GetCoefC(out c);
+            GetCoefB(b, c);
+            GetCoefD(d, c);
    
             double[,] result = new double[a.Length, 4];
             for (int i = 0; i < a.Length; i++)
@@ -88,20 +101,20 @@ namespace CompMathLab3
                 result[i, 2] = c[i];
                 result[i, 3] = d[i];
             }
-            return result;
+            _splineSystem = result;
         }
-        public double Interpolate(double[,] numbers, double[,] splineSystem, double x) 
+        public double Interpolate(double x) 
         {
-            int splineIndex = numbers.GetLength(1) - 2;
-            for(int i = numbers.GetLength(1) - 2; i > 0;i--)
+            int splineIndex = _numbers.GetLength(1) - 2;
+            for(int i = _numbers.GetLength(1) - 2; i > 0;i--)
             {
-                if (numbers[0,i] > x)
+                if (_numbers[0,i] > x)
                 {
                     splineIndex = i - 1;
                 }
             }
 
-            double result = splineSystem[splineIndex, 0] + splineSystem[splineIndex, 1] * (x - numbers[0,splineIndex]) + splineSystem[splineIndex, 2] * Math.Pow((x - numbers[0, splineIndex]), 2) + splineSystem[splineIndex,3] * Math.Pow((x - numbers[0, splineIndex]), 3);
+            double result = _splineSystem[splineIndex, 0] + _splineSystem[splineIndex, 1] * (x - _numbers[0,splineIndex]) + _splineSystem[splineIndex, 2] * Math.Pow((x - _numbers[0, splineIndex]), 2) + _splineSystem[splineIndex,3] * Math.Pow((x - _numbers[0, splineIndex]), 3);
             return result;
         }
 
