@@ -8,12 +8,11 @@ namespace CompMathLab3
     public partial class Form1 : Form
     {
         private bool _isPointsExist = false;
-        //private double[,] _numbers = new double[,] { { 2, 4, 5 ,6,7}, { 6,6,1,-1,11 } };
         private double[,] _numbersFirstDeriv = new double[2, 5] { { 0.01, 0.1, 1, 10, 100 }, { 0.02, 0.2, 2, 20, 200 } };
         private Lagrange _lagrange = new Lagrange();
         private NewtonForm _newtonForm = new NewtonForm();
         private LeastSquares _leastSquares = new LeastSquares();
-        private CubeSpline _cubeSpline = new CubeSpline();
+        private CubeSpline _cubeSpline;
         private Derivative _derivative = new Derivative();
 
         private double MaxX
@@ -67,30 +66,59 @@ namespace CompMathLab3
         }
         private void DrawByCubeSpline()
         {
+            chart1.ChartAreas[0].Axes[0].Maximum = 12;
+            chart1.ChartAreas[0].Axes[0].Minimum = 0;
+            chart1.ChartAreas[0].Axes[1].Maximum = 30;
+            chart1.ChartAreas[0].Axes[1].Minimum = -10;
+
             chart1.Series[5].Points.Clear();
-            double x = Numbers[0,0], y;
+            chart1.Series[8].Points.Clear();
+            chart1.Series[9].Points.Clear();
+
+            double x = Numbers[0,0], y, yPlusStep, yMinusStep, derivFirst, derivSecond,
+                yPlusTwoSteps, yMinusTwoSteps;
+            double step = Math.Pow(10,-2);
+            _cubeSpline = new CubeSpline(Numbers);
             while (x <= MaxX)
             {
-                y = _cubeSpline.Interpolate(Numbers, _cubeSpline.GetSplineSystem(Numbers),x);
-                chart1.Series[5].Points.AddXY(x, y);
-                x += 0.01;
+                y = _cubeSpline.Interpolate(x);
+
+                yPlusStep = _cubeSpline.Interpolate(x+step);
+                yMinusStep = _cubeSpline.Interpolate(x - step);
+                derivFirst = _derivative.CalculateFirstDerivativeTwoSteps(yPlusStep, yMinusStep, step);
+
+                yPlusTwoSteps = _cubeSpline.Interpolate(x+2*step);
+                yMinusTwoSteps = _cubeSpline.Interpolate(x - 2 * step);
+                derivSecond = _derivative.CalculateSecondDerivative(yPlusTwoSteps,yMinusTwoSteps,y,step);
+
+                chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
+                chart1.Series[8].Points.AddXY(x, derivFirst);    //первые производные
+                chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
+                x += step;
             }
+
+
         }
 
         private void DrawByFirstDerivative()
         {
+            chart1.ChartAreas[0].Axes[0].Maximum = 1.1;
+            chart1.ChartAreas[0].Axes[0].Minimum = 0;
+            chart1.ChartAreas[0].Axes[1].Maximum = 2.1;
+            chart1.ChartAreas[0].Axes[1].Minimum = 0;
+
+            _derivative = new Derivative();
             richTextBox1.Text = $"\nШаг: 10^{(double)numericStepDegree.Value}\n";
             chart1.Series[6].Points.Clear();
-            chart1.ChartAreas[0].Axes[0].Maximum = 1.1;
-            chart1.ChartAreas[0].Axes[1].Maximum = 2.1;
+            
             double step = Math.Pow(10,(double) numericStepDegree.Value);
             double derivative = 0;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < Numbers.GetLength(1); i++)
             {
                 derivative = _derivative.CalculateFirstDerivative(Numbers[0, i], step);
                 chart1.Series[6].Points.AddXY(Numbers[0, i],derivative );
-                richTextBox1.Text += $"\nx = {Numbers[0, i]}, f'(x) = {derivative}\n";
+                richTextBox1.Text += $"\nx = {Numbers[0, i]}, f ' (x) = {derivative}\n";
             }
             
         }
@@ -163,10 +191,10 @@ namespace CompMathLab3
             chart1.Series[3].Points.Clear();
             chart1.Series[3].MarkerSize = 8;
             chart1.Series[3].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+
             for (int i = 0; i < Numbers.GetLength(1); i++)
-            {
                 chart1.Series[3].Points.AddXY(Numbers[0, i], Numbers[1, i]);
-            }
+            
         }
         private void DrawPointsFirstDerivative()
         {
@@ -183,16 +211,6 @@ namespace CompMathLab3
                 _isPointsExist = true;
             }
             
-        }
-        private void DrawPointsFirstAndSecondDerivative()
-        {
-            chart1.Series[3].Points.Clear();
-            chart1.Series[3].MarkerSize = 8;
-            chart1.Series[3].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            for (int i = 0; i < Numbers.GetLength(1); i++)
-            {
-                chart1.Series[3].Points.AddXY(Numbers[0, i], Numbers[1, i]);
-            }
         }
         private void buttonClear_Click(object sender, EventArgs e)
         {
@@ -292,6 +310,11 @@ namespace CompMathLab3
 
                 labelDegree.Visible = true;
                 numericUpDownDegree.Visible = true;
+                labelStep.Visible = false;
+                labelStepBase10.Visible = false;
+                numericStepDegree.Visible = false;
+                labelFirstDev.Visible = false;
+                richTextBox1.Visible = false;
             }
             else if(comboBoxMethods.SelectedIndex == 4)
             {
@@ -300,6 +323,8 @@ namespace CompMathLab3
                 labelStep.Visible = true;
                 labelStepBase10.Visible = true;
                 numericStepDegree.Visible = true;
+                labelFirstDev.Visible = true;
+                richTextBox1.Visible = true;
                 label1.Visible = false;
                 label2.Visible = false;
                 label3.Visible = false;
@@ -316,6 +341,8 @@ namespace CompMathLab3
 
             else
             {
+                labelFirstDev.Visible = false;
+                richTextBox1.Visible = false;
                 labelStep.Visible = false;
                 labelStepBase10.Visible = false;
                 numericStepDegree.Visible = false;
