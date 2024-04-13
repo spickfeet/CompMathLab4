@@ -41,6 +41,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridViewCoordinates = new System.Windows.Forms.DataGridView();
@@ -114,6 +115,7 @@
             series6.ChartArea = "ChartArea1";
             series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
             series6.Color = System.Drawing.Color.Indigo;
+            series6.MarkerSize = 2;
             series6.Name = "Series6";
             series7.BorderWidth = 3;
             series7.ChartArea = "ChartArea1";
@@ -142,6 +144,11 @@
             series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series12.Color = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             series12.Name = "Series12";
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series13.Color = System.Drawing.Color.Black;
+            series13.MarkerSize = 2;
+            series13.Name = "Series13";
             this.chart1.Series.Add(series1);
             this.chart1.Series.Add(series2);
             this.chart1.Series.Add(series3);
@@ -154,6 +161,7 @@
             this.chart1.Series.Add(series10);
             this.chart1.Series.Add(series11);
             this.chart1.Series.Add(series12);
+            this.chart1.Series.Add(series13);
             this.chart1.Size = new System.Drawing.Size(1066, 753);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "Графики";

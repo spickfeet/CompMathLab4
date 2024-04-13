@@ -66,10 +66,10 @@ namespace CompMathLab3
         }
         private void DrawByCubeSpline()
         {
-            chart1.ChartAreas[0].Axes[0].Maximum = 12;
-            chart1.ChartAreas[0].Axes[0].Minimum = 0;
-            chart1.ChartAreas[0].Axes[1].Maximum = 30;
-            chart1.ChartAreas[0].Axes[1].Minimum = -10;
+            chart1.ChartAreas[0].Axes[0].Maximum = 4;
+            chart1.ChartAreas[0].Axes[0].Minimum = -4;
+            chart1.ChartAreas[0].Axes[1].Maximum = 5;
+            chart1.ChartAreas[0].Axes[1].Minimum = -1;
 
             chart1.Series[5].Points.Clear();
             chart1.Series[8].Points.Clear();
@@ -79,9 +79,11 @@ namespace CompMathLab3
                 yPlusTwoSteps, yMinusTwoSteps;
             double step = Math.Pow(10,-2);
             _cubeSpline = new CubeSpline(Numbers);
+            double y2;
             while (x <= MaxX)
             {
                 y = _cubeSpline.Interpolate(x);
+                y2 = Math.Pow(x, 2);
 
                 yPlusStep = _cubeSpline.Interpolate(x+step);
                 yMinusStep = _cubeSpline.Interpolate(x - step);
@@ -94,6 +96,7 @@ namespace CompMathLab3
                 chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
                 chart1.Series[8].Points.AddXY(x, derivFirst);    //первые производные
                 chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
+                chart1.Series[11].Points.AddXY(x, y2);
                 x += step;
             }
 
