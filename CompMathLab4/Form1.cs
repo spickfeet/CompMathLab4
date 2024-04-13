@@ -75,7 +75,7 @@ namespace CompMathLab3
             chart1.Series[8].Points.Clear();
             chart1.Series[9].Points.Clear();
 
-            double x = Numbers[0,0], y, yPlusStep, yMinusStep, derivFirst, derivSecond,
+            double x = Numbers[0,0], y, yPlusStep, yMinusStep, derivFirst = 0, derivSecond = 0, derivSecondY2 = 0,
                 yPlusTwoSteps, yMinusTwoSteps;
             double step = Math.Pow(10,-2);
             _cubeSpline = new CubeSpline(Numbers);
@@ -84,18 +84,24 @@ namespace CompMathLab3
             {
                 y = _cubeSpline.Interpolate(x);
                 y2 = Math.Pow(x, 2);
+                if (x >= Numbers[0, 0] + 2 * step && x <= MaxX - 2 * step)
+                {
+                    yPlusStep = _cubeSpline.Interpolate(x + step);
+                    yMinusStep = _cubeSpline.Interpolate(x - step);
+                    derivFirst = _derivative.CalculateFirstDerivativeTwoSteps(yPlusStep, yMinusStep, step);
 
-                yPlusStep = _cubeSpline.Interpolate(x+step);
-                yMinusStep = _cubeSpline.Interpolate(x - step);
-                derivFirst = _derivative.CalculateFirstDerivativeTwoSteps(yPlusStep, yMinusStep, step);
+                    yPlusTwoSteps = _cubeSpline.Interpolate(x + 2 * step);
+                    yMinusTwoSteps = _cubeSpline.Interpolate(x - 2 * step);
+                    derivSecond = _derivative.CalculateSecondDerivative(yPlusTwoSteps, yMinusTwoSteps, y, step);
 
-                yPlusTwoSteps = _cubeSpline.Interpolate(x+2*step);
-                yMinusTwoSteps = _cubeSpline.Interpolate(x - 2 * step);
-                derivSecond = _derivative.CalculateSecondDerivative(yPlusTwoSteps,yMinusTwoSteps,y,step);
+                    derivSecondY2 = _derivative.CalculateSecondDerivative(Math.Pow(x + 2 * step, 2), Math.Pow(x - 2 * step, 2), Math.Pow(x, 2), step);
+
+                    chart1.Series[8].Points.AddXY(x, derivFirst);    //первые производные
+                    chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
+                    chart1.Series[12].Points.AddXY(x, derivSecondY2);    //вторые производные
+                }
 
                 chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
-                chart1.Series[8].Points.AddXY(x, derivFirst);    //первые производные
-                chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
                 chart1.Series[11].Points.AddXY(x, y2);
                 x += step;
             }
