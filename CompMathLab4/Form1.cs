@@ -66,10 +66,10 @@ namespace CompMathLab3
         }
         private void DrawByCubeSpline()
         {
-            chart1.ChartAreas[0].Axes[0].Maximum = 8;
-            chart1.ChartAreas[0].Axes[0].Minimum = -8;
-            chart1.ChartAreas[0].Axes[1].Maximum = 8;
-            chart1.ChartAreas[0].Axes[1].Minimum = -8;
+            chart1.ChartAreas[0].Axes[0].Maximum = 4;
+            chart1.ChartAreas[0].Axes[0].Minimum = -4;
+            chart1.ChartAreas[0].Axes[1].Maximum = 4;
+            chart1.ChartAreas[0].Axes[1].Minimum = -4;
 
             chart1.Series[5].Points.Clear();
             chart1.Series[8].Points.Clear();
@@ -77,15 +77,15 @@ namespace CompMathLab3
 
             double x = Numbers[0,0], y, yPlusStep, yMinusStep, derivFirst = 0, derivSecond = 0, derivSecondY2 = 0,
                 yPlusTwoSteps, yMinusTwoSteps;
-            double step = 0.01;
+            double step = (double)numericUpDownAccuracy.Value;
             _cubeSpline = new CubeSpline(Numbers);
             double y2;
-            int pointIndex = 1;
             while (x <= MaxX)
             {
                 y = _cubeSpline.Interpolate(x);
-
+                y2 = Math.Pow(x, 2);
                 chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
+                chart1.Series[12].Points.AddXY(x, y2);   
                 if (x >= Numbers[0, 0] + 2 * step && x <= MaxX - 2 * step)
                 {
                     //if (x <= (Numbers[0, pointIndex] + 2 * step) + step / 2 && x >= (Numbers[0, pointIndex] - 2 * step) - step / 2)
@@ -110,7 +110,7 @@ namespace CompMathLab3
 
                     chart1.Series[8].Points.AddXY(x, derivFirst);    //первые производные
                     chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
-                    chart1.Series[12].Points.AddXY(x, derivSecondY2);    //вторые производные
+                    chart1.Series[11].Points.AddXY(x, derivSecondY2);    //вторые производные
                 }
                 x += step;
             }
