@@ -66,10 +66,10 @@ namespace CompMathLab3
         }
         private void DrawByCubeSpline()
         {
-            chart1.ChartAreas[0].Axes[0].Maximum = 4;
-            chart1.ChartAreas[0].Axes[0].Minimum = -4;
-            chart1.ChartAreas[0].Axes[1].Maximum = 5;
-            chart1.ChartAreas[0].Axes[1].Minimum = -1;
+            chart1.ChartAreas[0].Axes[0].Maximum = 8;
+            chart1.ChartAreas[0].Axes[0].Minimum = -8;
+            chart1.ChartAreas[0].Axes[1].Maximum = 8;
+            chart1.ChartAreas[0].Axes[1].Minimum = -8;
 
             chart1.Series[5].Points.Clear();
             chart1.Series[8].Points.Clear();
@@ -77,15 +77,27 @@ namespace CompMathLab3
 
             double x = Numbers[0,0], y, yPlusStep, yMinusStep, derivFirst = 0, derivSecond = 0, derivSecondY2 = 0,
                 yPlusTwoSteps, yMinusTwoSteps;
-            double step = Math.Pow(10,-2);
+            double step = 0.01;
             _cubeSpline = new CubeSpline(Numbers);
             double y2;
+            int pointIndex = 1;
             while (x <= MaxX)
             {
                 y = _cubeSpline.Interpolate(x);
-                y2 = Math.Pow(x, 2);
+
+                chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
                 if (x >= Numbers[0, 0] + 2 * step && x <= MaxX - 2 * step)
                 {
+                    //if (x <= (Numbers[0, pointIndex] + 2 * step) + step / 2 && x >= (Numbers[0, pointIndex] - 2 * step) - step / 2)
+                    //{
+                    //    if (x >= (Numbers[0, pointIndex] + 2 * step) - step / 2 && x <= (Numbers[0, pointIndex] + 2 * step) + step / 2)
+                    //    {
+                    //        pointIndex++;
+                    //    }
+                    //    x += step;
+                    //    continue;
+                    //}
+
                     yPlusStep = _cubeSpline.Interpolate(x + step);
                     yMinusStep = _cubeSpline.Interpolate(x - step);
                     derivFirst = _derivative.CalculateFirstDerivativeTwoSteps(yPlusStep, yMinusStep, step);
@@ -100,12 +112,8 @@ namespace CompMathLab3
                     chart1.Series[9].Points.AddXY(x, derivSecond);    //вторые производные
                     chart1.Series[12].Points.AddXY(x, derivSecondY2);    //вторые производные
                 }
-
-                chart1.Series[5].Points.AddXY(x, y);    //кубич. сплайн
-                chart1.Series[11].Points.AddXY(x, y2);
                 x += step;
             }
-
 
         }
 
@@ -402,6 +410,11 @@ namespace CompMathLab3
         }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
         {
 
         }

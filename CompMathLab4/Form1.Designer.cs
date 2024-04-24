@@ -88,7 +88,7 @@
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Location = new System.Drawing.Point(19, 10);
-            this.chart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chart1.Margin = new System.Windows.Forms.Padding(2);
             this.chart1.Name = "chart1";
             series1.BorderWidth = 10;
             series1.ChartArea = "ChartArea1";
@@ -166,6 +166,7 @@
             this.chart1.Size = new System.Drawing.Size(853, 602);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "Графики";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // dataGridViewCoordinates
             // 
@@ -264,7 +265,7 @@
             // 
             this.button4.Font = new System.Drawing.Font("Comic Sans MS", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button4.Location = new System.Drawing.Point(1198, 122);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(252, 40);
             this.button4.TabIndex = 4;
@@ -436,7 +437,7 @@
             // 
             this.numericStepDegree.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.numericStepDegree.Location = new System.Drawing.Point(1394, 289);
-            this.numericStepDegree.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.numericStepDegree.Margin = new System.Windows.Forms.Padding(2);
             this.numericStepDegree.Maximum = new decimal(new int[] {
             1,
             0,
@@ -487,7 +488,7 @@
             // 
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.richTextBox1.Location = new System.Drawing.Point(893, 378);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(345, 234);
             this.richTextBox1.TabIndex = 28;
@@ -543,7 +544,7 @@
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
